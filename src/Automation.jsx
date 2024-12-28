@@ -13,12 +13,22 @@ import "./Automation.css";
 * email:azimaahmed36@gmail.com
 */
 export const Automation = (props) => {
-  const { elements } = props;
+  const { elements, onNodeClick } = props;
   const [layoutElements, setLayoutElements] = React.useState([]);
 
   React.useEffect(() => {
-    setLayoutElements(getLayoutedElements(elements));
-  }, [elements]);
+    const elementsWithCallbacks = elements.map(el => {
+      if (el.type === 'empty') return el;
+      return {
+        ...el,
+        data: {
+          ...el.data,
+          onNodeClickCallback: onNodeClick
+        }
+      };
+    });
+    setLayoutElements(getLayoutedElements(elementsWithCallbacks));
+  }, [elements, onNodeClick]);
 
   const layoutNodes = layoutElements.filter((x) => x.position);
   const layoutEdges = layoutElements.filter((x) => !x.position);

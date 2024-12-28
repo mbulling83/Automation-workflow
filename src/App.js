@@ -6,9 +6,11 @@ import { initialElements } from "./Data/Elements1";
 import { getUpdatedElementsAfterNodeAddition } from "./Utils/WorkflowElementUtils";
 import "antd/dist/antd.css";
 import "./index.scss";
+import NodeSidebar from "./components/NodeSidebar/NodeSidebar";
 
 const App = () => {
   const [elements, setElements] = React.useState([]);
+  const [selectedNode, setSelectedNode] = React.useState(null);
 
   const onAddNodeCallback = ({ id, type }) => {
     setElements((elements) =>
@@ -43,18 +45,24 @@ const App = () => {
     });
   };
 
-  const onNodeClickCallback = (id) => {
-    setElements((elements) => {
-      const currentNode = elements.find((x) => x.id === id);
-      const nodes = elements.filter((x) => x.position);
-      const edges = elements.filter((x) => !x.position);
-      console.error({
-        incomers: getIncomers(currentNode, nodes, edges),
-        outgoers: getOutgoers(currentNode, nodes, edges),
-      });
-      return elements;
-    });
-    alert(`You clicked the "${id}" node`);
+  const onNodeClickCallback = (nodeId) => {
+    const node = elements.find(el => el.id === nodeId);
+    setSelectedNode(node);
+  };
+
+  const handleSidebarClose = () => {
+    setSelectedNode(null);
+  };
+
+  const handleSidebarSave = (nodeId, properties) => {
+    setElements(els => 
+      els.map(el => 
+        el.id === nodeId 
+          ? { ...el, data: { ...el.data, properties } }
+          : el
+      )
+    );
+    setSelectedNode(null);
   };
 
   React.useEffect(() => {
@@ -62,7 +70,11 @@ const App = () => {
       .filter((x) => !x.target)
       .map((x) => ({
         ...x,
-        data: { ...x.data, onDeleteNodeCallback, onNodeClickCallback },
+        data: { 
+          ...x.data, 
+          onDeleteNodeCallback, 
+          onNodeClickCallback 
+        },
       }));
     const edges = initialElements
       .filter((x) => x.target)
@@ -72,7 +84,18 @@ const App = () => {
 
   return (
     <div className="App">
-      <Layout elements={elements} />
+      <Layout 
+        elements={elements}
+        onElementsChange={setElements}
+        onNodeClick={onNodeClickCallback}
+      />
+      {selectedNode && (
+        <NodeSidebar
+          node={selectedNode}
+          onClose={handleSidebarClose}
+          onSave={handleSidebarSave}
+        />
+      )}
     </div>
   );
 };

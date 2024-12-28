@@ -9,6 +9,7 @@ const EdgeAddButton = (props) => {
       <Menu.Item key="email">Email</Menu.Item>
       <Menu.Item key="sms">SMS</Menu.Item>
       <Menu.Item key="waitThenCheck">Rule</Menu.Item>
+      <Menu.Item key="aiAgent">AI Agent</Menu.Item>
       <Menu.Item key="end">End</Menu.Item>
     </Menu>
   );

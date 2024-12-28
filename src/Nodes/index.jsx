@@ -7,4 +7,5 @@ export const nodeTypes = {
   waitThenCheck: Node.Condition,
   end: Node.End,
   empty: Node.Empty,
+  aiAgent: Node.Action
 };

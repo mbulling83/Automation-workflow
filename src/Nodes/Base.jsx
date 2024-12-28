@@ -7,11 +7,13 @@ import {
   CheckCircleOutlined,
   FlagOutlined,
   CloseOutlined,
+  RobotOutlined
 } from "@ant-design/icons";
 
 import "./Style.scss";
 
 export const BaseNode = ({
+  id,
   type,
   data,
   selected,
@@ -35,7 +37,7 @@ export const BaseNode = ({
       aria-disabled={disabled}
       className={`NodeInnerWrapper ${additionalClassName}`}
       style={{ color: getColor(type) }}
-      {...(onNodeClick && { onClick: () => onNodeClick(type, data) })}
+      onClick={() => data.onNodeClickCallback(id)}
     >
       {content}
       <CloseOutlined className="closeIcon" onClick={onCloseIconClick} />
@@ -60,6 +62,8 @@ const getColor = (type) => {
       return colors.warning;
     case "end":
       return colors.base;
+    case "aiAgent":
+      return colors.accent;
     default:
       return colors.base;
   }

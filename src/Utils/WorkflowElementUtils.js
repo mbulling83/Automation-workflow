@@ -14,6 +14,8 @@ const getTitleAndDescription = (type) => {
       return { title: "New Rule", description: "Check behaviour of the Rule" };
     case "end":
       return { title: "End", description: "Process ends" };
+    case "aiAgent":
+      return { title: "AI Agent", description: "Process with AI assistance" };
     default:
       return null;
   }
